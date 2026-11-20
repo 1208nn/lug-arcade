@@ -317,8 +317,8 @@ class MazeGame:
             c.put(x0 + px * 2 + jitter, y0 + py, "@ ", WHITE, BG, bold=True)
         # 浮动提示
         for x, y, text, col, life in self.popups:
-            tx = max(1, min(w - len(text) - 2, x0 + x * 2 - 2))
-            ty = max(3, min(h - 3, y0 + y - 1))
+            tx = int(max(1, min(w - len(text) - 2, x0 + x * 2 - 2)))
+            ty = int(max(3, min(h - 3, y0 + y - 1)))
             c.put(tx, ty, text, col, BG, bold=True)
 
         # 图例
