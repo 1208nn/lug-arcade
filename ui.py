@@ -199,7 +199,7 @@ def render_title(c: Canvas, menu: Menu, now: float, protocol: str) -> Frame:
     for i, line in enumerate(LINUX_ART):
         c.put(x, top + i, line, BLUE2 if i < 3 else BLUE, BG, bold=True)
     c.put(x + 1, top + 7, "新 手 村", AMBER, BG, bold=True)
-    c.put(x + 1, top + 9, "三个小游戏 · 一次毕业 · 不用学号", INK, BG)
+    c.put(x + 1, top + 9, "三个小游戏 · 一次毕业 · 直接开玩", INK, BG)
     c.put(x + 1, top + 10, "命令雨 / 文件迷宫 / 发行版记忆", DIM, BG)
 
     chip_y = max(top + 11, c.h - 10)
@@ -244,7 +244,7 @@ def render_about(c: Canvas, menu: Menu, now: float) -> Frame:
         ("Tab / ←→ 切换按钮 · Enter / 鼠标确认", DIM, False),
         ("方向键 / WASD 移动 · Esc 暂停；迷宫/记忆也可 P", DIM, False),
         ("", DIM, False),
-        ("没有学号、没有数据库、不联网。成绩只留在这一局屏幕上。", FAINT, False),
+        ("不收集身份、没有数据库、不联网。成绩只留在这一局屏幕上。", FAINT, False),
     ]
     y = py + max(2, (ph - len(lines)) // 2)
     for text, color, bold in lines:
@@ -352,7 +352,7 @@ def render_final(c: Canvas, run: Run, menu: Menu, now: float, protocol: str) -> 
     c.put(px + 28, yy + 1, f"{run.elapsed:0.0f}s", INK, PANEL)
     msg = "向工作人员出示此画面" if run.all_won else "再玩一次，把三个章都点亮"
     c.put(px + 3, py + (c.h - 11) - 3, msg, AMBER, PANEL, bold=True)
-    c.put(px + 3, py + (c.h - 11) - 2, "没有学号，没有上传，只记录这一局。", FAINT, PANEL)
+    c.put(px + 3, py + (c.h - 11) - 2, "不收集身份，没有上传，只记录这一局。", FAINT, PANEL)
 
     menu.row(c, (("再来一轮", "again"), ("退出", "quit")), c.h - 6, 3, 2, accent=AMBER)
     menu.draw(c)
