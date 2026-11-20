@@ -108,21 +108,21 @@ class MazeGame:
 
     def _place_files(self) -> None:
         dist = self._distances(self.start)
-        floors = sorted((p for p in dist if p != self.exit and p != self.start),
-                        key=lambda p: dist[p])
+        floors = [p for p in dist if p != self.exit and p != self.start]
         if not floors:
             return
-        picks = []
-        for frac in (0.34, 0.52, 0.70, 0.88):
-            idx = min(len(floors) - 1, int(len(floors) * frac))
-            while idx < len(floors) and floors[idx] in picks:
-                idx += 1
-            if idx >= len(floors):
-                idx = len(floors) - 1
-                while floors[idx] in picks:
-                    idx -= 1
-            picks.append(floors[idx])
-        for cell, (letter, name, color) in zip(picks, FILES):
+        # 按距离分层后抽样，保证四个文件一定不重复。
+        floors.sort(key=lambda p: dist[p])
+        bucket = max(1, len(floors) // len(FILES))
+        picks: list[tuple[int, int]] = []
+        for i, (letter, name, color) in enumerate(FILES):
+            lo = min(len(floors) - 1, i * bucket)
+            hi = min(len(floors), (i + 1) * bucket)
+            pool = [p for p in floors[lo:hi] if p not in picks] or [p for p in floors if p not in picks]
+            if not pool:
+                break
+            cell = self.rng.choice(pool)
+            picks.append(cell)
             self.files[cell] = (letter, name, color)
 
     def _place_bugs(self) -> list[dict]:
@@ -281,6 +281,9 @@ class MazeGame:
         maze_w = self.cols * cellw
         x0 = (w - maze_w) // 2
         y0 = 3
+        if maze_w + 2 > w or self.rows + 5 > h:
+            c.center(max(1, h // 2), "窗口太小，放大后再继续", AMBER, BG, bold=True)
+            return
         c.box(x0 - 1, y0 - 1, maze_w + 2, self.rows + 2, BLUE, "~/village", BLUE2, BG, fill_inner=True)
         for y in range(self.rows):
             for x in range(self.cols):

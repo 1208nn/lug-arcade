@@ -106,6 +106,8 @@ class Canvas:
 
     def box(self, x: int, y: int, w: int, h: int, fg=FAINT, title: str = "",
             title_fg=DIM, bg=None, fill_inner: bool = False) -> None:
+        if w <= 0 or h <= 0:
+            return
         if fill_inner:
             self.fill(x, y, w, h, " ", None, bg or BG)
         self.put(x, y, "╭", fg)
@@ -123,7 +125,7 @@ class Canvas:
             tx = x + 2
             self.put(tx, y, t, title_fg, bg or BG)
             for i in range(width(t)):
-                if tx + i < x + w - 1:
+                if 0 <= y < self.h and 0 <= tx + i < self.w and tx + i < x + w - 1:
                     self.rows[y][tx + i][2] = bg or BG
 
     def _style(self, fg, bg, bold) -> str:
